@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deploymnet
+metadata:
+  name: logstash-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: logstash
+  template:
+    metadata:
+      name: logstash-pod
+      labels:
+        app: logstash
+    spec:
+      containers:
+        - name: logstash
+          image: logstash:7.17.1
+          ports:
+            - containerPort: 9600
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: logstash-service
+spec:
+  type: ClusterIP
+  selector:
+    app: logstash
+  ports:
+    - protocol: TCP
+      port: 9600
+      targetPort: 9600
